@@ -2,15 +2,10 @@ const RNDSCALE = 200;
 const ANIMTIME = 3000;
 var running = 0;
 
-$("head").append("<style>"+
-  ".left{transform:scaleX(-1);}"+
-  ".bigger{transform:scale(1.5);}"+
-  ".left.bigger{transform:scale(-1.5,1.5);}"+
-  "</style>"); //I didn't touch the CSS
-  $("#fish1Id").attr("x",1);
-  $("#fish1Id").attr("y",0);
-  $("#fish2Id").attr("x",1);
-  $("#fish2Id").attr("y",0);
+$("#fish1Id").attr("x",1); //initial values
+$("#fish1Id").attr("y",0); //these are used for the rotation
+$("#fish2Id").attr("x",1);
+$("#fish2Id").attr("y",0);
 
 function colliding(first,second){
   if ((first.offset().top + first.height()) < second.offset().top ||
@@ -21,6 +16,9 @@ function colliding(first,second){
     return true;
 }
 
+//Here the transform property for the fishes is managed, each time
+//a function have to change it, it just needs to call this one,
+//this avoid some bad overridings while modifying it
 function transformFish(fish,x,y){
   var start = Math.atan(fish.attr("y")/fish.attr("x"));
   fish.attr("x",x);
@@ -57,7 +55,7 @@ function randMoves(fish){
     (ANIMTIME+ANIMTIME*rnd)/speed,"linear",function(){randMoves(fish)});
 }
 
-function goingUp(bubble){
+function goingUp(bubble){ //TODO change this simple function with your own class
   bubble.stop(1);
   bubble.fadeIn();
   bubble.removeClass("pop");
@@ -67,7 +65,7 @@ function goingUp(bubble){
     function(){goingUp(bubble)});
 }
 
-$(".bubbleClass").each(function(i){
+$(".bubbleClass").each(function(i){ //TODO still the same, u should change here
   $(this).delay(i*2000).animate({},function(){goingUp($(this))});
 });
 
@@ -75,7 +73,7 @@ $("[id*=fish]").animate({},function(){ randMoves($(this)) });
 
 $(window).click(function(pos){
   let fish = $("#fish1Id");
-  if(pos.pageY>fish.offset().top 
+  if(pos.pageY>fish.offset().top //don't do it if clicking on the fish
     && pos.pageY<fish.offset().top+fish.height() 
     && pos.pageX>fish.offset().left 
     && pos.pageX<fish.offset().left+fish.width())
@@ -106,6 +104,10 @@ $("#fish1Id").dblclick(function(){
   //.delay(2000).removeClass("bigger"); //was not working
 });
 
+//This function is running periodically to check for collisions
+//for both the bubbles and the fishes, when a fish touches a bubble
+//it pops and restarts from the bottom, when the fishes are touching
+//they get angry (change color) and start running
 setInterval(function(){
   var fish1 = $("#fish1Id");
   var fish2 = $("#fish2Id");
@@ -115,7 +117,7 @@ setInterval(function(){
     if(colliding($(this),fish1)
       || colliding($(this),fish2))
       $(this).fadeOut(function(){$(this).addClass("pop");
-        goingUp($(this))});
+        goingUp($(this))}); //TODO plug your method here (if applicable)
   });
   if(colliding(fish1,fish2)){
     fish1.attr("src",'images/fish1_angry.png');
