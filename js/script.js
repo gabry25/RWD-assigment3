@@ -2,6 +2,12 @@ const RNDSCALE = 200;
 const ANIMTIME = 3000;
 var running = 0;
 
+
+$("head").append("<style>"+
+  "[id*=fish]{ background:url('images/movingBubbles.gif') no-repeat;"+
+             "padding-left:5%;"+
+             "background-position-y:center;}"+
+  "</style>");
 $("#fish1Id").attr("x",1); //initial values
 $("#fish1Id").attr("y",0); //these are used for the rotation
 $("#fish2Id").attr("x",1);
@@ -72,6 +78,11 @@ $(".bubbleClass").each(function(i){ //TODO still the same, u should change here
 $("[id*=fish]").animate({},function(){ randMoves($(this)) });
 
 $(window).click(function(pos){
+  splash = $("<img src='images/movingBubbles.gif'/>");
+  splash.height(100); splash.width(100);
+  splash.offset({top:pos.pageY-50,left:pos.pageX-50});
+  $(document.body).append(splash);
+  setTimeout(function(){ splash.remove()},250);
   let fish = $("#fish1Id");
   if(pos.pageY>fish.offset().top //don't do it if clicking on the fish
     && pos.pageY<fish.offset().top+fish.height() 
