@@ -3,15 +3,31 @@ const ANIMTIME = 3000;
 var running = 0;
 
 
-$("head").append("<style>"+
-  "[id*=fish]{ background:url('images/movingBubbles.gif') no-repeat;"+
-             "padding-left:5%;"+
-             "background-position-y:center;}"+
-  "</style>");
-$("#fish1Id").attr("x",1); //initial values
-$("#fish1Id").attr("y",0); //these are used for the rotation
-$("#fish2Id").attr("x",1);
-$("#fish2Id").attr("y",0);
+$("head").append(`
+    <style>
+      [id*=fish] { 
+        background:url('images/movingBubbles.gif') no-repeat;
+        padding-left:5%;
+        background-position-y:center;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-width: 100vw;
+
+        background-position: center; 
+        background-repeat: no-repeat;
+      }
+  </style>`
+);
+
+$("#fish1Id")
+  .attr("x",1) //initial values
+  .attr("y",0); //these are used for the rotation
+
+$("#fish2Id")
+  .attr("x",1)
+  .attr("y",0);
 
 function colliding(first,second){
   if ((first.offset().top + first.height()) < second.offset().top ||
@@ -56,7 +72,7 @@ function randMoves(fish){
   else
     fish.removeClass("left");
   transformFish(fish,leftShift,topShift);
-  var speed = running?7:1;
+  let speed = running?7:1;
   fish.animate({top:"+="+topShift,left:"+="+leftShift},
     (ANIMTIME+ANIMTIME*rnd)/speed,"linear",function(){randMoves(fish)});
 }
@@ -82,7 +98,9 @@ $(window).click(function(pos){
   splash.height(100); splash.width(100);
   splash.offset({top:pos.pageY-50,left:pos.pageX-50});
   $(document.body).append(splash);
-  setTimeout(function(){ splash.remove()},250);
+  setTimeout(function(){ 
+    splash.remove()
+  },250);
   let fish = $("#fish1Id");
   if(pos.pageY>fish.offset().top //don't do it if clicking on the fish
     && pos.pageY<fish.offset().top+fish.height() 
@@ -110,8 +128,10 @@ $("#fish1Id").dblclick(function(){
   fish=$(this);
   fish.addClass("bigger");
   transformFish(fish,fish.attr("x"),fish.attr("y"));
-  setTimeout(function(){ fish.removeClass("bigger");transformFish(
-    fish,fish.attr("x"),fish.attr("y")) },2000);
+  setTimeout(function(){ 
+    fish.removeClass("bigger");
+    transformFish(fish,fish.attr("x"),fish.attr("y")) 
+  },2000);
   //.delay(2000).removeClass("bigger"); //was not working
 });
 
@@ -159,3 +179,11 @@ $("#fish2Id").mouseenter(function(){
   $(this).stop(1);
   $(this).animate(move,700,function(){randMoves($(this))});
 });
+
+
+// pop the bubble if you click on one of them
+$('[id*="bubble"]').click(function() {
+  $(this).fadeOut(1000,function() {
+    goingUp($(this))
+  });
+})

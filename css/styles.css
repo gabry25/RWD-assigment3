@@ -2,7 +2,7 @@ body {
     background-image: url("../images/aquarium.jpg");
     background-size: cover;
 }
-
+    
 img {
     position: fixed;
 }
