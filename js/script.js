@@ -94,19 +94,19 @@ $(".bubbleClass").each(function(i){ //TODO still the same, u should change here
 $("[id*=fish]").animate({},function(){ randMoves($(this)) });
 
 $(window).click(function(pos){
-  splash = $("<img src='images/movingBubbles.gif'/>");
-  splash.height(100); splash.width(100);
-  splash.offset({top:pos.pageY-50,left:pos.pageX-50});
-  $(document.body).append(splash);
-  setTimeout(function(){ 
-    splash.remove()
-  },250);
   let fish = $("#fish1Id");
   if(pos.pageY>fish.offset().top //don't do it if clicking on the fish
     && pos.pageY<fish.offset().top+fish.height() 
     && pos.pageX>fish.offset().left 
     && pos.pageX<fish.offset().left+fish.width())
     return;
+  let splash = $("<img src='images/movingBubbles.gif'/>");
+  splash.height(100); splash.width(100);
+  splash.offset({top:pos.pageY-50,left:pos.pageX-50});
+  $(document.body).append(splash);
+  setTimeout(function(){ 
+    splash.remove()
+  },250);
   let move = {top:pos.pageY-fish.height()/2,
     left:pos.pageX-fish.width()/2};
   if(move.top>$(window).height()-fish.height())
@@ -147,7 +147,7 @@ setInterval(function(){
       return;
     if(colliding($(this),fish1)
       || colliding($(this),fish2))
-      $(this).fadeOut(function(){$(this).addClass("pop");
+      $(this).fadeOut(400,function(){$(this).addClass("pop");
         goingUp($(this))}); //TODO plug your method here (if applicable)
   });
   if(colliding(fish1,fish2)){
@@ -183,7 +183,7 @@ $("#fish2Id").mouseenter(function(){
 
 // pop the bubble if you click on one of them
 $('[id*="bubble"]').click(function() {
-  $(this).fadeOut(1000,function() {
+  $(this).fadeOut(400,function() {
     goingUp($(this))
   });
 })
