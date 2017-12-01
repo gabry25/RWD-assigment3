@@ -77,7 +77,7 @@ function randMoves(fish){
     (ANIMTIME+ANIMTIME*rnd)/speed,"linear",function(){randMoves(fish)});
 }
 
-function goingUp(bubble){ //TODO change this simple function with your own class
+function goingUp(bubble){ 
   bubble.stop(1);
   bubble.fadeIn();
   bubble.removeClass("pop");
@@ -87,7 +87,7 @@ function goingUp(bubble){ //TODO change this simple function with your own class
     function(){goingUp(bubble)});
 }
 
-$(".bubbleClass").each(function(i){ //TODO still the same, u should change here
+$(".bubbleClass").each(function(i){
   $(this).delay(i*2000).animate({},function(){goingUp($(this))});
 });
 
@@ -148,7 +148,7 @@ setInterval(function(){
     if(colliding($(this),fish1)
       || colliding($(this),fish2))
       $(this).fadeOut(400,function(){$(this).addClass("pop");
-        goingUp($(this))}); //TODO plug your method here (if applicable)
+        goingUp($(this))});
   });
   if(colliding(fish1,fish2)){
     fish1.attr("src",'images/fish1_angry.png');
